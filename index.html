@@ -5,101 +5,116 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>I miei animali Preferiti</title>
-  <!-- react -->
-  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 
 
 <body>
 
-  <!-- header -->
+
   <header>
     <h1>I miei animali Preferiti</h1>
   </header>
-
-
-  <!-- main -->
   <main>
     <figure>
       <img src="https://picsum.photos/400/300" alt="Immagine Casuale">
     </figure>
     <!-- elemento DOM dove andremmo ad inserire il componente React -->
     <div class="lista-animali">
-
-      <!-- Montiamo il componente React -->
-      <script type="text/babel">
-        const { useState } = React;
-        const ReactApp = () => {
-          // logica
-          const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
-
-          const [animali, setAnimal] = useState([])
-
-          function addPet() {
-            setAnimal(prevArray => [...prevArray, animalsChoices[Math.floor(Math.random() * animalsChoices.length)]])
-            console.log('Ho aggiunto un animale')
-          }
-
-          return (
-            <div>
-              <button onClick={addPet}> Add Pet </button>
-              <details>
-                <summary>Animali</summary>
-                <ul>
-                  {animali.length === 0 ? (
-                    <li> Non hai aggiunto nessun animale </li>
-                  ) : (
-                    animali.map((animal, index) => <li key={index}>{animal}</li>)
-                  )}
-                </ul>
-              </details>
-            </div>
-          )
-        }
-
-      </script>
     </div>
-
-
-    <!-- Stampiamo il nostro Componente nel Dom  -->
-    <script type="text/babel">
-      const { createRoot } = ReactDOM;
-      const listaAnimali = document.querySelector('.lista-animali');
-      const root = createRoot(listaAnimali);
-      root.render(<ReactApp />)
-    </script>
-
   </main>
+  <footer>
+    <p>Creato con amore da... un collega sbadato! 🐾</p>
+  </footer>
 
+  <!-- react -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 
-  <!-- modal -->
+  <!-- Montiamo il componente React -->
   <script type="text/babel">
+    const { useState } = React;
+
+    // modal 
     function Modal({
       title,
       content,
       show = false,
-      onClose = () => { }
+      onClose = () => { },
+      onConfirm = () => { }
     }) {
       return show && ReactDOM.createPortal(
         <div className="modal-container">
           <div className="modal">
             <h2>{title}</h2>
-            <p>{content}</p>
-            <button onClick={onClose}>Annulla</button>
+            {content}
+            <div>
+              <button onClick={onClose}>Annulla</button>
+              <button onClick={onConfirm}>Conferma</button>
+            </div>
+
           </div>
         </div>,
         document.body
       )
     }
+
+
+    const ReactApp = () => {
+      // logica
+      const animalsChoices = ["Cane", "Gatto", "Pappagallo", "Cavallo", "Panda"];
+
+      const [animali, setAnimal] = useState([])
+      const [apriModale, setApriModale] = useState(false)
+      const [value, setValue] = useState('')
+
+      function addPet() { }
+
+      return (
+        <React.Fragment>
+          <button onClick={() => setApriModale(true)}> Apri Modale </button>
+          <details>
+            <summary>Animali</summary>
+            <ul>
+              {animali.length === 0 ? (
+                <li> Non hai aggiunto nessun animale </li>
+              ) : (
+                animali.map((a, index) => <li key={index}>{a}</li>)
+              )}
+            </ul>
+          </details>
+
+          <Modal
+            title='Aggiungi un nuovo animale carino'
+            content={<input
+              type="text"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+            />}
+            show={apriModale}
+            onClose={() => setApriModale(false)}
+            onConfirm={() => {
+              setAnimal([...animali, value])
+              setApriModale(false)
+              setValue('')
+            }}
+
+          />
+
+        </React.Fragment>
+      )
+    }
+
   </script>
 
-  <!-- footer -->
-  <footer>
-    <p>Creato con amore da... un collega sbadato! 🐾</p>
-  </footer>
+  <!-- Stampiamo il nostro Componente nel Dom  -->
+  <script type="text/babel">
+    const { createRoot } = ReactDOM;
+    const listaAnimali = document.querySelector('.lista-animali');
+    const root = createRoot(listaAnimali);
+    root.render(<ReactApp />)
+  </script>
 
 </body>
 
