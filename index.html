@@ -26,7 +26,7 @@
     <figure>
       <img src="https://picsum.photos/400/300" alt="Immagine Casuale">
     </figure>
-    <!-- elemento DOM dove andremmo a montare il componente React -->
+    <!-- elemento DOM dove andremmo ad inserire il componente React -->
     <div class="lista-animali">
 
       <!-- Montiamo il componente React -->
@@ -39,7 +39,6 @@
           const [animali, setAnimal] = useState([])
 
           function addPet() {
-
             setAnimal(prevArray => [...prevArray, animalsChoices[Math.floor(Math.random() * animalsChoices.length)]])
             console.log('Ho aggiunto un animale')
           }
@@ -76,12 +75,31 @@
   </main>
 
 
+  <!-- modal -->
+  <script type="text/babel">
+    function Modal({
+      title,
+      content,
+      show = false,
+      onClose = () => { }
+    }) {
+      return show && ReactDOM.createPortal(
+        <div className="modal-container">
+          <div className="modal">
+            <h2>{title}</h2>
+            <p>{content}</p>
+            <button onClick={onClose}>Annulla</button>
+          </div>
+        </div>,
+        document.body
+      )
+    }
+  </script>
+
   <!-- footer -->
   <footer>
     <p>Creato con amore da... un collega sbadato! 🐾</p>
   </footer>
-
-
 
 </body>
 
